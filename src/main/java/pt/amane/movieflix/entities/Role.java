@@ -1,17 +1,17 @@
 package pt.amane.movieflix.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_role")
@@ -24,18 +24,15 @@ public class Role implements Serializable {
 	private Long id;
 	private String authority;
 
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+	@ManyToMany(mappedBy = "roles")
+	private Set<User> users = new HashSet<>();
 
 	public Role() {
 	}
 
-	public Role(Long id, String authoity, User user) {
+	public Role(Long id, String authoity) {
 		this.id = id;
 		this.authority = authoity;
-		this.user = user;
 	}
 
 	public Long getId() {
@@ -54,12 +51,8 @@ public class Role implements Serializable {
 		this.authority = authoity;
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
+	public Set<User> getUsers() {
+		return users;
 	}
 
 	@Override

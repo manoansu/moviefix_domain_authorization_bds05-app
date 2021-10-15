@@ -14,25 +14,24 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
+	
 	@Autowired
 	private Environment env;
-
+	
 	@Autowired
 	private JwtTokenStore jwtTokenStore;
-
-	private static final String[] PUBLIC = { "/oauth/token", "/h2-console/**" };
-
-	private static final String[] OPERATOR_GET = { "/cities/**", "/events/**" };
-
-	private static final String[] OPERATOR_POST = { "/events/**" };
-
+	
+	private static final String[] PUBLIC = {"/oauth/token", "/h2-console/**"};
+	
+	private static final String[] OPERATOR_GET = {"/departments/**","/employees/**"};
+		
+	
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 		resources.tokenStore(jwtTokenStore);
 	}
-
+	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		
@@ -43,8 +42,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		
 		http.authorizeRequests()
 		.antMatchers(PUBLIC).permitAll()
-		.antMatchers(HttpMethod.GET, OPERATOR_GET).permitAll()
-		.antMatchers(HttpMethod.POST, OPERATOR_POST).hasAnyRole("CLIENT", "ADMIN")
+		.antMatchers(HttpMethod.POST, OPERATOR_GET).hasAnyRole("OPERATOR", "ADMIN")
 		.anyRequest().hasAnyRole("ADMIN");
 	}
 
