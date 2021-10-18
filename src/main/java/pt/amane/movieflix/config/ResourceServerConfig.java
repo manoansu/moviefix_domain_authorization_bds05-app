@@ -24,7 +24,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 	
 	private static final String[] PUBLIC = {"/oauth/token", "/h2-console/**"};
 	
-	private static final String[] OPERATOR_GET = {"/departments/**","/employees/**"};
+	private static final String[] OPERATOR_GET = {"/users/**"};
 		
 	
 	@Override
@@ -42,8 +42,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 		
 		http.authorizeRequests()
 		.antMatchers(PUBLIC).permitAll()
-		.antMatchers(HttpMethod.POST, OPERATOR_GET).hasAnyRole("OPERATOR", "ADMIN")
-		.anyRequest().hasAnyRole("ADMIN");
+		.antMatchers(HttpMethod.GET, OPERATOR_GET).hasAnyRole("VISITOR", "MEMBER")
+		.anyRequest().hasAnyRole("MEMBER");
 	}
 
 }
